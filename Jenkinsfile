@@ -3,36 +3,12 @@ pipeline {
     environment{
         DOCKER_TAG = getDockerTag()
     }
-    stages {
-        stage ('Build Docker Image') {
-            steps {
-                   sh "docker build . -t timbobb/nodeapp:${DOCKER_TAG}"
+    stages{
+        stage('Build Docker Image'){
+            steps{
+                sh "docker build . -t Merveilletchouda/node-app:${DOCKER_TAG}"
             }
         }
-        stage('DockerHub Push'){
-            steps{
-                withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]) {
-                    sh "docker login -u timbobb -p ${dockerHubPwd}"
-                    sh "docker push timbobb/nodeapp:${DOCKER_TAG}"
-                }
-            }
-        }
-        stage('Deploy to Kubernetes'){
-            steps{
-                sh "chmod +x changeTag.sh"
-                sh "./changeTag.sh ${DOCKER_TAG}"
-                sshagent(['kops-machine']) {
-                    sh "scp -o StrictHostKeyChecking=no services.yml node-app-pod.yml ec2-user@3.133.92.125:/home/ec2-user"
-                    script {
-                        try {
-                            sh "ssh ec2-user@3.133.92.125 kubectl apply -f ."
-                        }catch(error){
-                           sh "ssh ec2-user@3.133.92.125 kubectl create -f ."
-                        }
-                    }
-                }
-            }
-        }   
     }
 }
 

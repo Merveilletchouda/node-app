@@ -6,17 +6,16 @@ pipeline {
     stages{
         stage('Build Docker Image'){
             steps{
-                sh "docker build . -t merveilletchouda/node-app:${DOCKER_TAG}"
+                sh "docker build . -t merveilletchouda/nodeapp:${DOCKER_TAG}"
             }
         }
         stage('DockerHub Push'){
-            steps {
-                withCredentials([string(credentialsId: 'docker-hub', variable: 'DockerHubPwd')]) {
-                    sh "docker login -u merveilletchouda -p ${DockerHubPwd}"
-                    sh "docker push merveilletchouda/nodeapp:${DOCKER_TAG}"
-                }
+           steps{
+                withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]) {
+            sh "docker login -u docker-hub -p ${dockerHubPwd}"
+            sh "docker push merveilletchouda/nodeapp:${DOCKER_TAG}"
             }
-            
+           }
         }
     }
 }

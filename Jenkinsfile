@@ -6,7 +6,7 @@ pipeline {
     stages{
         stage('Build Docker Image'){
             steps{
-                sh "docker build . -t Merveilletchouda/node-app:${DOCKER_TAG}"
+                sh "docker build . -t merveilletchouda/node-app:${DOCKER_TAG}"
             }
         }
     }

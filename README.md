@@ -1,3 +1,3 @@
 # node-app
 new file
-.
+..

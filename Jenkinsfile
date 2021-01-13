@@ -16,7 +16,12 @@ pipeline {
                     sh "docker push merveilletchouda/nodeapp:${DOCKER_TAG}"
                 }
             }
-
+        }
+        stage('Deploy to Kubernetes'){
+            steps{
+                sh "chmod +x changeTag.sh"
+                sh "./changeTag.sh ${DOCKER_TAG}"
+            }
         }
     }
 }
@@ -24,5 +29,3 @@ pipeline {
 def getDockerTag(){
     def tag = sh script: 'git rev-parse HEAD', returnStdout: true
     return tag
-}
-

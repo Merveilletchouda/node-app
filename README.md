@@ -2,3 +2,4 @@
 new file
 ..
 new add
+now
